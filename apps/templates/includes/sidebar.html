@@ -6,35 +6,73 @@
         <div class="sidebar-wrapper">
             <div class="logo">
                 <a href="javascript:void(0)" class="simple-text logo-mini">
-                    CT
+                    FT
                 </a>
                 <a href="javascript:void(0)" class="simple-text logo-normal">
-                    Creative Tim
+                    Fin Tracker
                 </a>
             </div>
             <ul class="nav">
-                <li class="{% if 'index' in segment %} active {% endif %} ">
+                <li class="">
                     <a href="/">
-                        <i class="tim-icons icon-chart-pie-36"></i>
-                        <p>Dashboard</p>
+                      <i class="tim-icons icon-chart-pie-36"></i>
+                      <p>Аналитика</p>
                     </a>
                 </li>
                 <li class="{% if 'user' in segment %} active {% endif %}">
                     <a href="/user.html">
                         <i class="tim-icons icon-single-02"></i>
-                        <p>User Profile</p>
+                        <p>Профиль пользователя</p>
                     </a>
                 </li>
-                <li class="{% if 'tables' in segment %} active {% endif %}">
-                    <a href="/tables.html">
-                        <i class="tim-icons icon-puzzle-10"></i>
-                        <p>Table List</p>
+                <li class="">
+                    <a data-toggle="collapse" href="#dashboardshome" aria-expanded="false">
+                      <i class="tim-icons  icon-lock-circle"></i>
+                      <p>
+                        Расходы\доходы
+                        <b class="caret"></b>
+                      </p>
                     </a>
-                </li>2
+
+                    <div class="collapse " id="dashboardshome">
+                      <ul class="nav">
+
+<!--                        <li class="">-->
+<!--                          <a href="/admin/home/budget/">-->
+<!--                            <span class="sidebar-mini-icon">Б</span>-->
+<!--                            <span class="sidebar-normal">Бюджеты</span>-->
+<!--                          </a>-->
+<!--                        </li>-->
+
+                        <li class="">
+                          <a href="/admin/home/category/">
+                            <span class="sidebar-mini-icon">К</span>
+                            <span class="sidebar-normal">Категории</span>
+                          </a>
+                        </li>
+
+                        <li class="">
+                          <a href="/admin/home/transaction/">
+                            <span class="sidebar-mini-icon">Т</span>
+                            <span class="sidebar-normal">Транзакции</span>
+                          </a>
+                        </li>
+
+<!--                        <li class="">-->
+<!--                          <a href="/admin/home/savingsgoal/">-->
+<!--                            <span class="sidebar-mini-icon">Ц</span>-->
+<!--                            <span class="sidebar-normal">Цели накопления</span>-->
+<!--                          </a>-->
+<!--                        </li>-->
+
+                      </ul>
+                    </div>
+
+                </li>
                 <li>
                     <a href="{% url 'login' %}">
                         <i class="tim-icons icon-button-power"></i>
-                        <p>Logout</p>
+                        <p>Выйти</p>
                     </a>
                 </li>
             </ul>
