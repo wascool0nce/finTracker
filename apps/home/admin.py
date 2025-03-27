@@ -5,15 +5,16 @@ Copyright (c) 2019 - present AppSeed.us
 # Register your models here.
 from django.contrib import admin
 
-from apps.home.forms import TransactionForm
+from apps.home.forms import TransactionForm, CategoryForm
 from apps.home.models import Category, Transaction, Budget, SavingsGoal
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'type')  # Поля, отображаемые в списке
-    list_filter = ('type', 'user')  # Фильтры в правой части админки
+    list_filter = ('type',)  # Фильтры в правой части админки
     search_fields = ('name',)  # Поля для поиска
     ordering = ('type', 'name')  # Сортировка по умолчанию
+    form = CategoryForm
 
     def get_queryset(self, request):
         # Суперпользователь видит все, остальные — только свои объекты
@@ -28,14 +29,27 @@ class CategoryAdmin(admin.ModelAdmin):
             obj.user = request.user
         super().save_model(request, obj, form, change)
 
+
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):
-    list_display = ('date', 'category', 'amount', 'get_transaction_type') # Отображаемые поля
-    list_filter = ('category__type', 'date')  # Фильтры
-    search_fields = ('description', 'category__name')  # Поиск по описанию и названию категории
-    date_hierarchy = 'date'  # Иерархия по дате
-    ordering = ('-date',) # Сортировка по дате (новые сверху)
-    form = TransactionForm
+    list_display = ('date', 'category', 'amount', 'get_transaction_type')
+    list_filter = ('category__type', 'date')
+    search_fields = ('description', 'category__name')
+    date_hierarchy = 'date'
+    ordering = ('-date',)
+    form = TransactionForm  # Указываем нашу форму
+
+    # Убираем поле user из формы
+    exclude = ('user',)
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        class CustomForm(form):
+            def __init__(self, *args, **kwargs):
+                super().__init__(*args, **kwargs)
+                self.fields['category'].queryset = Category.objects.filter(user=request.user)
+
+        return CustomForm
 
     def get_queryset(self, request):
         # Суперпользователь видит все, остальные — только свои объекты
@@ -43,7 +57,6 @@ class TransactionAdmin(admin.ModelAdmin):
         # if request.user.is_superuser:
         #     return qs
         return qs.filter(user=request.user)
-
 
     def get_transaction_type(self, obj):
         return "Доход" if obj.transaction_type == "income" else "Расход"
